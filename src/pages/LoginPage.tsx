@@ -1,10 +1,12 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { FaSpinner } from 'react-icons/fa';
+import { toast } from 'react-hot-toast';
 
 export default function LoginPage() {
   const { login } = useAuth();
+  const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState<'student' | 'teacher' | 'admin' | ''>('');
@@ -15,40 +17,20 @@ export default function LoginPage() {
     e.preventDefault();
     if (!email || !password || !role) {
       setError('Please fill in all fields');
+      toast.error('Please fill in all fields');
       return;
     }
     setLoading(true);
     setError('');
     try {
-      // Placeholder for backend API call
-      // const response = await api.login({ email, password, role });
-      // login(response.user, response.token);
-      login(
-        {
-          id: '1',
-          name: 'John Doe',
-          email,
-          role,
-        },
-        'placeholder-token' // Replace with actual token from backend
-      );
+      await login(email, password); // Call updated login function
+      navigate('/dashboard'); // Redirect to dashboard after successful login
     } catch (err) {
       setError('Login failed. Please try again.');
+      toast.error('Login failed. Please try again.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleRoleLogin = (selectedRole: 'student' | 'teacher' | 'admin') => {
-    login(
-      {
-        id: '1',
-        name: 'John Doe',
-        email: 'john@example.com',
-        role: selectedRole,
-      },
-      'placeholder-token' // Replace with actual token from backend
-    );
   };
 
   return (
@@ -137,36 +119,6 @@ export default function LoginPage() {
             Sign In
           </button>
         </form>
-
-        {/* Quick Role-Based Login (for testing) */}
-        <div className="mt-6 space-y-4">
-          <p className="text-center text-sm text-gray-600">
-            Or choose a role to quick login (testing only):
-          </p>
-          <div className="grid grid-cols-3 gap-3">
-            <button
-              onClick={() => handleRoleLogin('student')}
-              className="py-2 px-3 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition duration-200"
-              disabled={loading}
-            >
-              Student
-            </button>
-            <button
-              onClick={() => handleRoleLogin('teacher')}
-              className="py-2 px-3 bg-green-600 text-white text-sm font-medium rounded-md hover:bg-green-700 transition duration-200"
-              disabled={loading}
-            >
-              Teacher
-            </button>
-            <button
-              onClick={() => handleRoleLogin('admin')}
-              className="py-2 px-3 bg-purple-600 text-white text-sm font-medium rounded-md hover:bg-purple-700 transition duration-200"
-              disabled={loading}
-            >
-              Admin
-            </button>
-          </div>
-        </div>
 
         <div className="mt-6 text-center">
           <Link

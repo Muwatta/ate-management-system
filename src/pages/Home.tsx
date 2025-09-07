@@ -5,8 +5,8 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { Loader2, BookOpen, Mail, Calendar, Megaphone, ArrowRight, Phone, Users } from 'lucide-react';
 import { Toaster } from 'react-hot-toast';
-import Card from '@/components/Card';
-import Button from '@/components/Button';
+import Card from '../components/Card';
+import { Button } from '../components/Button';
 
 export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
@@ -14,65 +14,78 @@ export default function Home() {
   const [news, setNews] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setEvents([
-        {
-          title: 'Science Fair',
-          date: 'June 15, 2025',
-          description: 'Showcase your scientific innovations.',
-          image: 'https://res.cloudinary.com/dee5edoss/image/upload/v1748055293/IMG-20250417-WA0009_u0hipk.jpg',
-        },
-        {
-          title: 'Parent-Teacher Conference',
-          date: 'July 2, 2025',
-          description: 'Discuss student progress.',
-          image: 'https://res.cloudinary.com/dee5edoss/image/upload/v1749409016/myGirls_wxk3zr.jpg',
-        },
-        {
-          title: 'Summer Coding Bootcamp',
-          date: 'August 5, 2025',
-          description: 'Learn coding and AI.',
-          image: 'https://res.cloudinary.com/dee5edoss/image/upload/v1741630750/IMG_20241219_104415_645_-1374329958_kgpgos.jpg',
-        },
-      ]);
-      setNews([
-        {
-          title: 'New Robotics Lab Launched',
-          description: 'State-of-the-art robotics lab now open for all students!',
-          image: '/images/roboticLab.png',
-        },
-        {
-          title: 'National Girls in ICT Finalist',
-          description: 'Our students are finalists in the National Girls in ICT competition!',
-          image: '/images/N-ICT.jpg',
-        },
-        {
-          title: 'On-site Bootcamp 2.0 Highlight',
-          description: 'Students trained in STEAM, AI & ML, and Web Development.',
-          image: '/images/002.jpg',
-        },
-      ]);
-      setTestimonials([
-        {
-          name: 'Sarah A.',
-          role: 'Parent',
-          quote: 'Algorise Tech Explorers transformed my child’s confidence in STEM!',
-        },
-        {
-          name: 'Dr. Michael Okon',
-          role: 'Teacher',
-          quote: 'An inspiring environment that fosters innovation and collaboration.',
-        },
-        {
-          name: 'Aisha B.',
-          role: 'Student',
-          quote: 'The coding bootcamp was a game-changer for my career aspirations.',
-        },
-      ]);
-      setIsLoading(false);
-    }, 1000);
-  }, []);
+useEffect(() => {
+  const timer = setTimeout(() => {
+    setEvents([
+      {
+        title: "Science Fair",
+        date: "June 15, 2025",
+        description: "Showcase your scientific innovations.",
+        image:
+          "https://res.cloudinary.com/dee5edoss/image/upload/v1748055293/IMG-20250417-WA0009_u0hipk.jpg",
+      },
+      {
+        title: "Parent-Teacher Conference",
+        date: "July 2, 2025",
+        description: "Discuss student progress.",
+        image:
+          "https://res.cloudinary.com/dee5edoss/image/upload/v1749409016/myGirls_wxk3zr.jpg",
+      },
+      {
+        title: "Summer Coding Bootcamp",
+        date: "August 5, 2025",
+        description: "Learn coding and AI.",
+        image:
+          "https://res.cloudinary.com/dee5edoss/image/upload/v1741630750/IMG_20241219_104415_645_-1374329958_kgpgos.jpg",
+      },
+    ]);
+
+    setNews([
+      {
+        title: "New Robotics Lab Launched",
+        description:
+          "State-of-the-art robotics lab now open for all students!",
+        image: "/images/roboticLab.png", // <-- make sure this is in public/images
+      },
+      {
+        title: "National Girls in ICT Finalist",
+        description:
+          "Our students are finalists in the National Girls in ICT competition!",
+        image: "/images/N-ICT.jpg",
+      },
+      {
+        title: "On-site Bootcamp 2.0 Highlight",
+        description: "Students trained in STEAM, AI & ML, and Web Development.",
+        image: "/images/002.jpg",
+      },
+    ]);
+
+    setTestimonials([
+      {
+        name: "Sarah A.",
+        role: "Parent",
+        quote:
+          "Algorise Tech Explorers transformed my child’s confidence in STEM!",
+      },
+      {
+        name: "Dr. Michael Okon",
+        role: "Teacher",
+        quote:
+          "An inspiring environment that fosters innovation and collaboration.",
+      },
+      {
+        name: "Aisha B.",
+        role: "Student",
+        quote:
+          "The coding bootcamp was a game-changer for my career aspirations.",
+      },
+    ]);
+
+    setIsLoading(false);
+  }, 1000);
+
+  return () => clearTimeout(timer); // ✅ cleanup
+}, []);
 
   const slickSettings = {
     dots: true,
@@ -109,12 +122,13 @@ export default function Home() {
             '@type': 'Organization',
             name: 'Algorise Tech Explorers',
             url: 'https://www.algorisetech.com',
-            logo: '/images/ATE-img-logo.jpg',
+            logo: '/images/ATE-img-logo.jpg', // Fixed: Ensured valid JSON
             description: 'Algorise Tech Explorers empowers the next generation through innovative STEM, arts, and leadership education.',
           })}
         </script>
       </header>
 
+      {/* Rest of the file remains unchanged */}
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-teal-600 to-blue-500 text-white py-20 px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between text-center md:text-left">
@@ -125,7 +139,7 @@ export default function Home() {
             className="max-w-xl w-full md:pr-8 flex flex-col gap-6"
           >
             <h1 className="text-4xl sm:text-5xl font-bold flex items-center gap-2">
-              <BookOpen className="h-8 w-8" /> Welcome to Algorise Tech Explorers
+               Welcome to Algorise Tech Explorers
             </h1>
             <p className="text-lg md:text-xl text-cyan-100">
               Unleashing creativity and innovation through cutting-edge STEM, arts, and leadership programs.
@@ -166,7 +180,6 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto text-center">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <BookOpen className="text-teal-600 h-6 w-6" />
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">About Algorise Tech Explorers</h2>
           </div>
           <p className="text-lg text-gray-600 max-w-3xl mx-auto mb-6">
@@ -208,7 +221,6 @@ export default function Home() {
           </motion.div>
           <div className="w-full md:w-1/2 text-center md:text-left">
             <div className="flex items-center gap-2 justify-center md:justify-start mb-4">
-              <BookOpen className="text-teal-600 h-6 w-6" />
               <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">Academic Excellence</h2>
             </div>
             <p className="text-lg text-gray-600 mb-6">
@@ -326,7 +338,6 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto text-center">
           <div className="flex items-center gap-2 mb-6 justify-center">
-            <Users className="text-teal-600 h-6 w-6" />
             <h2 className="text-3xl sm:text-4xl font-bold text-gray-900">What Our Community Says</h2>
           </div>
           {isLoading ? (
@@ -365,7 +376,6 @@ export default function Home() {
       >
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <BookOpen className="text-cyan-100 h-6 w-6" />
             <h2 className="text-3xl sm:text-4xl font-bold">Ready to Join Us?</h2>
           </div>
           <p className="text-lg text-cyan-100 mb-8 max-w-2xl mx-auto">

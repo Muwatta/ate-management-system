@@ -7,11 +7,12 @@ import 'slick-carousel/slick/slick-theme.css';
 
 export default function AboutPage() {
   const timeline = [
-    { year: '2018', event: 'Algorise Tech Explorers founded in Nigeria.' },
-    { year: '2020', event: 'Launched first coding bootcamp for teens.' },
-    { year: '2022', event: 'Won National STEM Innovation Award.' },
-    { year: '2024', event: 'Expanded to include arts and leadership programs.' },
-    { year: '2025', event: 'Opened state-of-the-art robotics lab.' },
+    { year: '2024', event: 'Algorise Tech Explorers founded in Nigeria.' },
+    { year: '2024', event: 'Launched first coding bootcamp for 49 teens.' },
+    { year: '2025', event: 'Finalist National Girls in ICT Technology.' },
+    { year: '2025', event: 'Expanded to include arts and leadership programs.' },
+    { year: '2025', event: 'Organised and Trained 40-students in coding Bootcamp'}
+
   ];
 
   const testimonials = [

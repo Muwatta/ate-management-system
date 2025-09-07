@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, ReactNode, useEffect } from 'react';
+import { toast } from 'react-hot-toast';
 
 interface User {
   id: string;
@@ -10,7 +11,7 @@ interface User {
 interface AuthContextProps {
   user: User | null;
   token: string | null;
-  login: (userData: User, token: string) => void;
+  login: (email: string, password: string) => void;
   logout: () => void;
   isLoading: boolean;
 }
@@ -22,35 +23,69 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load user and token from localStorage on mount
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
-    const storedToken = localStorage.getItem('token');
-    if (storedUser && storedToken) {
+    const fetchUser = async () => {
       try {
-        setUser(JSON.parse(storedUser));
-        setToken(storedToken);
+        const storedToken = localStorage.getItem('token'); // Temporary for testing; remove if not needed
+        if (storedToken) {
+          const response = await fetch('/api/auth/user', {
+            headers: { Authorization: `Bearer ${storedToken}` },
+          });
+          if (response.ok) {
+            const userData = await response.json();
+            setUser(userData);
+            setToken(storedToken);
+          } else {
+            setUser(null);
+            setToken(null);
+            localStorage.removeItem('token'); // Clean up
+          }
+        }
       } catch (error) {
-        console.error('Failed to parse stored auth data:', error);
-        localStorage.removeItem('user');
+        console.error('Failed to fetch user:', error);
+        setUser(null);
+        setToken(null);
         localStorage.removeItem('token');
+      } finally {
+        setIsLoading(false);
       }
-    }
-    setIsLoading(false);
+    };
+
+    fetchUser();
   }, []);
 
-  const login = (userData: User, token: string) => {
-    setUser(userData);
-    setToken(token);
-    localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('token', token);
+  const login = async (email: string, password: string) => {
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (response.ok) {
+        const { user: userData, token: newToken } = await response.json();
+        setUser(userData);
+        setToken(newToken);
+        localStorage.setItem('token', newToken); // Temporary for testing; remove if not needed
+        toast.success('Login successful!');
+      } else {
+        throw new Error('Login failed');
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error('Invalid credentials');
+      throw error;
+    }
   };
 
-  const logout = () => {
+  const logout = async () => {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
     setUser(null);
     setToken(null);
-    localStorage.removeItem('user');
-    localStorage.removeItem('token');
+    localStorage.removeItem('token'); // Temporary; remove if not needed
   };
 
   return (
