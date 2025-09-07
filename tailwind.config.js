@@ -1,19 +1,11 @@
 /** @type {import('tailwindcss').Config} */
-module.exports = {
+export default {
   content: [
-    "./app/**/*.{js,ts,jsx,tsx}",
-    "./components/**/*.{js,ts,jsx,tsx}",
-    "./sections/**/*.{js,ts,jsx,tsx}",
+    "./index.html",
+    "./src/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    extend: {
-      colors: {
-        gold: '#FFD700',
-        orange: '#FFA500',
-        papayawhip: '#FFEFD5',
-        relblack: '#181818', // "relative black"
-      },
-    },
+    extend: {},
   },
   plugins: [],
 }
