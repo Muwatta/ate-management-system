@@ -1,144 +1,164 @@
 import React, { ReactNode, useState } from "react";
-import { Link, useLocation } from "react-router-dom";
-import { FaBell, FaUserCircle, FaSearch } from "react-icons/fa";
+import { NavLink, useLocation } from "react-router-dom";
+import {
+  FaBell,
+  FaUserCircle,
+  FaSearch,
+  FaHome,
+  FaBook,
+  FaTasks,
+  FaGraduationCap,
+  FaUsers,
+  FaChalkboardTeacher,
+  FaCog,
+  FaCalendarAlt,
+  FaFileAlt,
+  FaComments,
+  FaChartLine,
+  FaLock,
+  FaUserShield,
+} from "react-icons/fa";
+import { useAuth } from "../context/AuthContext";
+import { Button } from "../components/Button";
+import { toast } from "react-hot-toast";
 
 interface DashboardLayoutProps {
   children: ReactNode;
-  role?: "student" | "teacher" | "admin"; // 👈 role prop
 }
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, role = "student" }) => {
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+  const { user, logout } = useAuth();
   const location = useLocation();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
 
-  // Active link checker
-  const isActive = (path: string) =>
-    location.pathname.startsWith(path)
-      ? "text-yellow-400 font-semibold"
-      : "text-gray-300 hover:text-white";
+  const role = user?.role || "student";
 
-  // Sidebar menus by role
-  const renderSidebarLinks = () => {
-    switch (role) {
-      case "student":
-        return (
-          <>
-            <Link to="/dashboard/courses" className={isActive("/dashboard/courses")}>
-              📚 My Courses
-            </Link>
-            <Link to="/dashboard/assignments" className={isActive("/dashboard/assignments")}>
-              📝 Assignments
-            </Link>
-            <Link to="/dashboard/grades" className={isActive("/dashboard/grades")}>
-              🎯 Grades
-            </Link>
-            <Link to="/students/progress" className={isActive("/students/progress")}>
-              📊 Progress
-            </Link>
-          </>
-        );
+  const menuConfig = {
+    admin: [
+      { path: "/dashboard", label: "Dashboard", icon: <FaHome /> },
+      { path: "/courses", label: "Courses", icon: <FaBook /> },
+      { path: "/assignments", label: "Assignments", icon: <FaTasks /> },
+      { path: "/grades", label: "Grades", icon: <FaGraduationCap /> },
+      { path: "/students", label: "Students", icon: <FaUsers /> },
+      { path: "/teachers", label: "Teachers", icon: <FaChalkboardTeacher /> },
+      { path: "/events", label: "Events", icon: <FaCalendarAlt /> },
+      { path: "/reports", label: "Reports", icon: <FaFileAlt /> },
+      { path: "/admin/users", label: "User Management", icon: <FaUserShield /> },
+      { path: "/settings/security", label: "Security", icon: <FaLock /> },
+      { path: "/settings", label: "Settings", icon: <FaCog /> },
+    ],
+    teacher: [
+      { path: "/dashboard", label: "Dashboard", icon: <FaHome /> },
+      { path: "/my-courses", label: "My Courses", icon: <FaBook /> },
+      { path: "/assignments", label: "Assignments", icon: <FaTasks /> },
+      { path: "/gradebook", label: "Gradebook", icon: <FaGraduationCap /> },
+      { path: "/my-students", label: "My Students", icon: <FaUsers /> },
+      { path: "/discussions", label: "Discussions", icon: <FaComments /> },
+      { path: "/analytics", label: "Analytics", icon: <FaChartLine /> },
+      { path: "/settings", label: "Settings", icon: <FaCog /> },
+    ],
+    student: [
+      { path: "/dashboard", label: "Dashboard", icon: <FaHome /> },
+      { path: "/my-courses", label: "My Courses", icon: <FaBook /> },
+      { path: "/assignments", label: "Assignments", icon: <FaTasks /> },
+      { path: "/my-grades", label: "My Grades", icon: <FaGraduationCap /> },
+      { path: "/discussions", label: "Discussions", icon: <FaComments /> },
+      { path: "/events", label: "Events", icon: <FaCalendarAlt /> },
+      { path: "/settings", label: "Settings", icon: <FaCog /> },
+    ],
+  };
 
-      case "teacher":
-        return (
-          <>
-            <Link to="/teachers" className={isActive("/teachers")}>
-              📖 My Dashboard
-            </Link>
-            <Link to="/teachers/create-course" className={isActive("/teachers/create-course")}>
-              ➕ Create Course
-            </Link>
-            <Link to="/teachers/manage-students" className={isActive("/teachers/manage-students")}>
-              👩‍🎓 Manage Students
-            </Link>
-          </>
-        );
+  const menuItems = menuConfig[role];
 
-      case "admin":
-        return (
-          <>
-            <Link to="/admin" className={isActive("/admin")}>
-              🛠 Admin Panel
-            </Link>
-            <Link to="/admin/manage-users" className={isActive("/admin/manage-users")}>
-              👥 Manage Users
-            </Link>
-            <Link to="/settings" className={isActive("/settings")}>
-              ⚙ Settings
-            </Link>
-          </>
-        );
-
-      default:
-        return null;
-    }
+  const handleNavClick = (label: string) => {
+    toast.success(`Navigating to ${label}!`, { duration: 2000 });
   };
 
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar */}
-      <aside className="w-64 bg-gray-900 text-white p-6 space-y-4">
-        <h2 className="text-2xl font-bold">LMS</h2>
-        <nav className="space-y-2 mt-6">{renderSidebarLinks()}</nav>
+      <aside className="w-64 bg-white shadow-lg flex flex-col">
+        <div className="flex items-center justify-center h-16 border-b bg-indigo-50">
+          <span className="text-2xl font-bold text-indigo-700">Algorise LMS</span>
+        </div>
+        <nav className="flex-1 overflow-y-auto p-4 flex flex-col gap-2">
+          {menuItems.map((item) => (
+            <NavLink
+              key={item.path}
+              to={item.path}
+              onClick={() => handleNavClick(item.label)}
+              className={({ isActive: active }) =>
+                `flex items-center gap-3 px-4 py-2 rounded-lg font-medium transition ${
+                  active
+                    ? "bg-indigo-600 text-white shadow-md"
+                    : "text-gray-700 hover:bg-gray-100 hover:text-indigo-700"
+                }`
+              }
+            >
+              {item.icon}
+              <span>{item.label}</span>
+            </NavLink>
+          ))}
+        </nav>
       </aside>
 
-      {/* Main Section */}
       <div className="flex-1 flex flex-col">
-        {/* Top Navbar */}
         <header className="flex items-center justify-between bg-white shadow px-6 py-3">
-          {/* Search */}
           <div className="flex items-center space-x-2 w-1/3">
             <FaSearch className="text-gray-500" />
             <input
               type="text"
               placeholder="Search..."
-              className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring focus:ring-yellow-400"
+              className="w-full border border-gray-300 rounded-md px-2 py-1 text-sm focus:outline-none focus:ring focus:ring-indigo-400"
             />
           </div>
 
-          {/* Right Actions */}
           <div className="flex items-center space-x-6">
-            {/* Notifications */}
-            <button className="relative">
+            <Button className="relative" ariaLabel="Notifications">
               <FaBell className="text-gray-600 text-lg" />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
                 3
               </span>
-            </button>
+            </Button>
 
-            {/* Profile Dropdown */}
             <div className="relative">
-              <button
+              <Button
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
+                ariaLabel="Toggle profile menu"
                 className="flex items-center space-x-2"
               >
                 <FaUserCircle className="text-2xl text-gray-700" />
-                <span className="text-sm font-medium text-gray-700">John Doe</span>
-              </button>
+                <span className="text-sm font-medium text-gray-700">{user?.name || "Guest"}</span>
+              </Button>
 
               {isProfileOpen && (
-                <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2">
-                  <Link
-                    to="/students/profile"
+                <div className="absolute right-0 mt-2 w-40 bg-white shadow-lg rounded-md py-2 z-50">
+                  <NavLink
+                    to="/profile"
                     className="block px-4 py-2 text-sm hover:bg-gray-100"
+                    onClick={() => handleNavClick("My Profile")}
                   >
                     My Profile
-                  </Link>
-                  <Link
+                  </NavLink>
+                  <NavLink
                     to="/settings"
                     className="block px-4 py-2 text-sm hover:bg-gray-100"
+                    onClick={() => handleNavClick("Settings")}
                   >
                     Settings
-                  </Link>
-                  <button className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100">
+                  </NavLink>
+                  <Button
+                    onClick={logout}
+                    ariaLabel="Logout"
+                    className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
+                  >
                     Logout
-                  </button>
+                  </Button>
                 </div>
               )}
             </div>
           </div>
         </header>
 
-        {/* Page Content */}
         <main className="flex-1 bg-gray-50 p-8">{children}</main>
       </div>
     </div>

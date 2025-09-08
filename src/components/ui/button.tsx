@@ -17,7 +17,7 @@ interface ButtonProps {
 
 export function Button({ to, children, onClick, ariaLabel, icon: Icon, variant = 'primary', isLoading }: ButtonProps) {
   const handleClick = () => {
-    toast.success(`Navigating to ${ariaLabel}!`);
+    toast.success(`Navigating to ${ariaLabel}!`, { duration: 2000 });
     if (onClick) onClick();
   };
 

@@ -8,7 +8,13 @@ import ErrorBoundary from './components/ErrorBoundary';
 function App() {
   return (
     <AuthProvider>
-      <Toaster position="top-right" toastOptions={{ duration: 2000 }} />
+      <Toaster 
+        position="top-right" 
+        toastOptions={{ 
+          duration: 2000,
+          className: 'animate-fadeIn animate-fadeOut',
+        }} 
+      />
       <ErrorBoundary>
         <div className="flex flex-col min-h-screen">
           <Navbar />

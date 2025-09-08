@@ -18,22 +18,22 @@ useEffect(() => {
   const timer = setTimeout(() => {
     setEvents([
       {
-        title: "Science Fair",
+        title: "Independence Day",
         date: "June 15, 2025",
-        description: "Showcase your scientific innovations.",
+        description: "Collaboration with Save a Life Foundation, Jos.",
         image:
-          "https://res.cloudinary.com/dee5edoss/image/upload/v1748055293/IMG-20250417-WA0009_u0hipk.jpg",
+          "/images/bootcamp/ATECollaboration11-3.png",
       },
       {
-        title: "Parent-Teacher Conference",
-        date: "July 2, 2025",
-        description: "Discuss student progress.",
+        title: "Secomdary School Coding Challenge",
+        date: "Undefined, 2026",
+        description: "Coding Competition in Jos.",
         image:
-          "https://res.cloudinary.com/dee5edoss/image/upload/v1749409016/myGirls_wxk3zr.jpg",
+          "/images/bootcamp/BK-1.jpg",
       },
       {
-        title: "Summer Coding Bootcamp",
-        date: "August 5, 2025",
+        title: "Online & offline learning",
+        date: "Join now",
         description: "Learn coding and AI.",
         image:
           "https://res.cloudinary.com/dee5edoss/image/upload/v1741630750/IMG_20241219_104415_645_-1374329958_kgpgos.jpg",
@@ -45,7 +45,7 @@ useEffect(() => {
         title: "New Robotics Lab Launched",
         description:
           "State-of-the-art robotics lab now open for all students!",
-        image: "/images/roboticLab.png", // <-- make sure this is in public/images
+        image: "/images/roboticLab.png", 
       },
       {
         title: "National Girls in ICT Finalist",
@@ -68,10 +68,10 @@ useEffect(() => {
           "Algorise Tech Explorers transformed my child’s confidence in STEM!",
       },
       {
-        name: "Dr. Michael Okon",
-        role: "Teacher",
+        name: "Mrs Nurudeen",
+        role: "Parent",
         quote:
-          "An inspiring environment that fosters innovation and collaboration.",
+          "My child has now begun to simulate thinking with hardwork.",
       },
       {
         name: "Aisha B.",
@@ -105,7 +105,6 @@ useEffect(() => {
 
   return (
     <main className="flex-1 bg-gray-50">
-      <Toaster position="top-right" />
       {/* SEO Meta Tags */}
       <header>
         <title>Algorise Tech Explorers - Empowering Innovators</title>
@@ -160,7 +159,7 @@ useEffect(() => {
             className="w-full md:w-1/2 mt-8 md:mt-0 flex justify-center"
           >
             <img
-              src="https://res.cloudinary.com/dee5edoss/image/upload/v1739290847/Hassana-others_znwnly.jpg"
+              src="/images/bootcamp/BK.jpg"
               alt="Students innovating at Algorise Tech Explorers"
               className="rounded-lg shadow-lg w-full max-w-md h-auto object-cover"
               loading="lazy"
@@ -249,7 +248,7 @@ useEffect(() => {
           {isLoading ? (
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {[...Array(3)].map((_, i) => (
-                <div key={i} className="animate-pulse bg-gray-200 rounded-lg h-64 w-full flex items-center justify-center">
+                <div key={i} className="animate-pulse bg-gray-200 rounded-lg h-70 w-full flex items-center justify-center">
                   <Loader2 className="h-8 w-8 animate-spin text-teal-600" />
                 </div>
               ))}
